@@ -9,7 +9,7 @@ Created on Feb 1, 2013
 '''
 
 import sys, time, glob
-sys.path.append('/usr/remote/user/sispi/jiangang/des-image-hao/imgQualityHao')
+sys.path.append('/usr/remote/user/sispi/jiangang/desimghao')
 
 
 if __name__ == "__main__":
