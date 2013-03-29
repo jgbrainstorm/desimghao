@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # build a catalog using sextractor on des image
 
-import sys,glob
+import sys,glob,string
 sys.path.append('/usr/remote/user/sispi/jiangang/decam-fermi')
 #from DECamCCD import *
 
