@@ -8,6 +8,8 @@ J. Hao @ FNAL, 11/28/2012
 import numpy as np
 import pyfits as pf
 import sys,time
+import glob as gl
+
 
 def oscanSub(img):
     """
