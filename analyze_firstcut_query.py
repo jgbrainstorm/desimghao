@@ -32,6 +32,5 @@ for i in range(n):
         Mrr = iyy[good].mean()
         Mrc = ixy[good].mean()
         fluxrad = robust_mean(b.FLUX_RADIUS)
-            fwhmworld =  robust_mean(b.FWHM_WORLD)
-            data.append([Mcc,Mrr,Mrc,fluxrad,fwhmworld])
-    e
+        fwhmworld =  robust_mean(b.FWHM_WORLD)
+        data.append([Mcc,Mrr,Mrc,fluxrad,fwhmworld])
