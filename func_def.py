@@ -513,8 +513,8 @@ def whisker4QReduce(X2WIN_IMAGE=None,Y2WIN_IMAGE=None,XYWIN_IMAGE=None):
     This function make the whisker plot based on the sextractor export from QuickReduce
     J.Hao, 12/4/2012
     """
-    xpos = np.genfromtxt('/usr/remote/user/sispi/jiangang/des-image-hao/imgQualityHao/xpos_ypos_fp.txt').T[0]
-    ypos = np.genfromtxt('/usr/remote/user/sispi/jiangang/des-image-hao/imgQualityHao/xpos_ypos_fp.txt').T[1]
+    xpos = np.genfromtxt('/usr/remote/user/sispi/jiangang/desimghao/xpos_ypos_fp.txt').T[0]
+    ypos = np.genfromtxt('/usr/remote/user/sispi/jiangang/desimghao/xpos_ypos_fp.txt').T[1]
     temp = np.zeros(62).astype('complex')
     temp.real = X2WIN_IMAGE - Y2WIN_IMAGE
     temp.imag = 2*XYWIN_IMAGE
