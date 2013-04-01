@@ -720,7 +720,7 @@ def des_img_analysis(img_name=None):
     M22imag = 2.*data[:,2]
     #---now use the weight kernel corrected moments to calculate whiskers --
     datamean = np.array([robust_mean(data[:,3]),robust_mean(data[:,4]),robust_mean(data[:,5])])
-    datasubmean = data[3:6] - datamean
+    datasubmean = data[:,3:6] - datamean
     r50Sex = robust_mean(np.array(r50Sex))*scale
     whk = ((datamean[0]-datamean[1])**2 + (2.*datamean[2])**2)**(0.25)*scale
     phi = np.rad2deg(0.5*np.arctan2(2.*datamean[2],(datamean[0]-datamean[1])))
