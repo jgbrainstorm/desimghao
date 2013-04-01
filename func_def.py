@@ -709,6 +709,7 @@ def des_img_analysis(img_name=None):
     ccdpos = np.array(ccdpos)
     #----make the whisker plot ----
     whisker4QReduce(X2WIN_IMAGE=data[:,0],Y2WIN_IMAGE=data[:,1],XYWIN_IMAGE=data[:,2])
+    pl.figtext(0.4,0.96,'expid: '+str(expid))
     pl.savefig('moments_whisker_'+expid+'.png')
     pl.close()
     M20 = data[:,0] + data[:,1]
@@ -748,6 +749,7 @@ def des_img_analysis(img_name=None):
     np.savetxt('hexapod_position_'+expid+'.txt',[hexposhdr,hexHao,hexBCAM],fmt='%10.5f')
     #hexHao = hexapod_multilinear(beta)
     dispM202Coeff(betaAll = betaforplot, betaErrAll = betaErrforplot,hexinfo=hexHao)
+    pl.figtext(0.4,0.96,'expid: '+str(expid))
     pl.savefig('zernike_coeff_'+expid+'.png')    
     return '----finished one image ----'
 
