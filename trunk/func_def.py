@@ -247,14 +247,17 @@ def measureIQstamp(stamp=None,bkg=None,sigma=None):
     Mrr = np.zeros(Nobj)
     Mcc = np.zeros(Nobj)
     Mrc = np.zeros(Nobj)
+    Mrr_correct = np.zeros(Nobj)
+    Mcc_correct = np.zeros(Nobj)
+    Mrc_correct = np.zeros(Nobj)
     for i in range(Nobj):
         if bkg == None:
-            Mcc[i],Mrr[i],Mrc[i]=complex2ndMoments(data=stamp[i],sigma=sigma)
+            Mcc[i],Mrr[i],Mrc[i],Mcc_correct[i], Mrr_correct[i],Mrc_correct[i]=complex2ndMoments(data=stamp[i],sigma=sigma)
         else:
             data = stamp[i]-bkg[i]
             if data.sum > 0.:
-                Mcc[i],Mrr[i],Mrc[i]=complex2ndMoments(data=data,sigma=sigma)      
-    return robust_mean(Mcc), robust_mean(Mrr), robust_mean(Mrc)
+                Mcc[i],Mrr[i],Mrc[i],Mcc_correct[i], Mrr_correct[i],Mrc_correct[i]=complex2ndMoments(data=data,sigma=sigma)      
+    return robust_mean(Mcc), robust_mean(Mrr), robust_mean(Mrc),robust_mean(Mcc_correct), robust_mean(Mrr_correct), robust_mean(Mrc_correct)
 
 
 def zernike_rad(m, n, rho):
