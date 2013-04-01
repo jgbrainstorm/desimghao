@@ -31,6 +31,7 @@ if __name__ == "__main__":
         expid = sys.argv[1]
         img_name = 'DECam_00'+expid+'_reduced.fits'
         t=des_img_analysis(img_name)
+    t=image_quality_summary()
     endTime=time.time()
     elapseTime=endTime-startTime
     print '---elapsed time: ' + str(elapseTime)
