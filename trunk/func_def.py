@@ -205,7 +205,7 @@ def complex2ndMoments(data=None,sigma=None):
         rowmean = rowmean+2.*drowmean
         colmean = colmean+2.*dcolmean
         if IWsum == 0:
-            return -999., -999., -999.
+            return -999., -999., -999., -999., -999., -999.
         if drowmean**2+dcolmean**2 <= EP:
             break
     rowgrid = rowgrid - rowmean # centered
@@ -218,12 +218,12 @@ def complex2ndMoments(data=None,sigma=None):
     Cm = np.matrix([[Mcc,Mrc],[Mrc,Mrr]])
     Cw = np.matrix([[sigma**2,0.],[0.,sigma**2]])
     Cimg = (Cm.I - Cw.I).I
-    Mcc = Cimg[0,0]
-    Mrr = Cimg[1,1]
-    Mrc = Cimg[0,1]
+    Mcc_correct = Cimg[0,0]
+    Mrr_correct = Cimg[1,1]
+    Mrc_correct = Cimg[0,1]
     #M20 = Mrr + Mcc
     #M22 = complex(Mcc - Mrr,2*Mrc)
-    return Mcc, Mrr, Mrc
+    return Mcc, Mrr, Mrc, Mcc_correct, Mrr_correct, Mrc_correct
 
 def firstcutStar(b):
     '''
@@ -702,7 +702,7 @@ def des_img_analysis(img_name=None):
             ccdpos.append([xccd,yccd])
             r50Sex.append(robust_mean(rad[ok]))
         else:
-            data.append([0.,0.,0.])
+            data.append([0.,0.,0.,0.,0.,0.])
             ccdpos.append([xccd,yccd])
             r50Sex.append(0.)
     data = np.array(data)
@@ -715,8 +715,9 @@ def des_img_analysis(img_name=None):
     M20 = data[:,0] + data[:,1]
     M22real = data[:,0] - data[:,1]
     M22imag = 2.*data[:,2]
-    datamean = np.array([robust_mean(data[:,0]),robust_mean(data[:,1]),robust_mean(data[:,2])])
-    datasubmean = data - datamean
+    #---now use the weight kernel corrected moments to calculate whiskers --
+    datamean = np.array([robust_mean(data[:,3]),robust_mean(data[:,4]),robust_mean(data[:,5])])
+    datasubmean = data[3:6] - datamean
     r50Sex = robust_mean(np.array(r50Sex))*scale
     whk = ((datamean[0]-datamean[1])**2 + (2.*datamean[2])**2)**(0.25)*scale
     phi = np.rad2deg(0.5*np.arctan2(2.*datamean[2],(datamean[0]-datamean[1])))
