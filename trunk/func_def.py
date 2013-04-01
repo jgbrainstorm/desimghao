@@ -45,6 +45,49 @@ def robust_mean(x):
             meany=yy.mean(dtype='double')
     return meany
 
+def image_quality_summary():
+    """
+    make a summary plot for the r50, whk, whkrms
+    """
+    f = gl.glob('desIQ_measure*.txt')
+    f.sort()
+    b=[]
+    for ff in f:
+        b.append(np.genfromtxt(ff))
+    b=np.array(b)
+    ind = np.arange(len(f))
+    expid = b[:,0].astype('i')
+    whk = b[:,1]  # these are all use weighted moments after correcting weight
+    phi = b[:,2]  # these are all use weighted moments after correcting weight
+    whkrms = b[:,3] # these are all use weighted moments after correcting weight
+    r50Sex = b[:,4] # these are from my run of sextractor
+    pl.figure(figsize=(15,12))
+    pl.subplot(3,1,1)
+    pl.plot(ind,whk,'bo')
+    pl.hlines(0.2,-0.5,len(expid),color='red')
+    pl.ylim(0,0.4)
+    pl.xticks(ind,np.repeat('',len(expid)))
+    pl.grid()
+    pl.ylabel('Whisker')
+    pl.title('Weighted moments after correcting for the weights')
+    pl.subplot(3,1,2)
+    pl.plot(ind,whkrms,'bo')
+    pl.hlines(0.2,-0.5,len(expid),color='red')
+    pl.grid()
+    pl.xticks(ind,np.repeat('',len(expid)))
+    pl.ylim(0.,0.4)
+    pl.ylabel('Whisker RMS')
+    pl.subplot(3,1,3)
+    pl.plot(ind,r50Sex,'bo')
+    pl.hlines(0.552,-0.5,len(expid),color='red')
+    pl.ylim(0,1)
+    pl.grid()
+    pl.ylabel('R50')
+    pl.xticks(ind,expid.astype('S10'),rotation=90)
+    pl.savefig('desIQ_summary.png')
+    pl.close()
+    np.savetxt('desIQ_summary.txt',b,fmt=['%i','%10.5f','%10.5f','%10.5f','%10.5f'])
+
 
 def robust_std(x):
     '''
@@ -726,7 +769,6 @@ def des_img_analysis(img_name=None):
     phi = np.rad2deg(0.5*np.arctan2(2.*datamean[2],(datamean[0]-datamean[1])))
     whkrms = (robust_mean((datasubmean[:,0] - datasubmean[:,1])**2 + 4.*datasubmean[:,2]**2))**(0.25)*scale
     np.savetxt('desIQ_measure_'+expid+'.txt',[int(expid),whk,phi,whkrms,r50Sex],fmt='%10.5f',delimiter=',')
-    #p.dump([int(expid),whk,phi,whkrms,r50Sex],open('desIQ_measures_'+expid+'.p','w'))
     print 'expid -----whisker----whisker Position Angle -----whisker rms ----- r50 ------'
     print expid, whk, phi, whkrms, r50Sex
     #---the hexapod adjustment using M20,M22---
