@@ -717,6 +717,7 @@ def des_img_analysis(img_name=None):
     bcamDY = pf.getheader(img_name,0)['BCAMDY']
     bcamAX = pf.getheader(img_name,0)['BCAMAX']
     bcamAY = pf.getheader(img_name,0)['BCAMAY']
+    fltr = pf.getheader(img_name,0)['filter'][0]
     data=[]
     ccdpos=[]
     r50Sex = []
@@ -744,7 +745,7 @@ def des_img_analysis(img_name=None):
             x=x[ok]
             y=y[ok]
             stamp = getStamp(data=img,xcoord=x,ycoord=y,Npix=25)
-            data.append(measureIQstamp(stamp,bkg,4.))
+            data.append(measureIQstamp(stamp,bkg,2.))
             ccdpos.append([xccd,yccd])
             r50Sex.append(robust_mean(rad[ok]))
         else:
@@ -755,7 +756,7 @@ def des_img_analysis(img_name=None):
     ccdpos = np.array(ccdpos)
     #----make the whisker plot ----
     whisker4QReduce(X2WIN_IMAGE=data[:,0],Y2WIN_IMAGE=data[:,1],XYWIN_IMAGE=data[:,2])
-    pl.figtext(0.4,0.96,'expid: '+str(expid))
+    pl.figtext(0.4,0.96,'expid: '+str(expid)+' ,'+fltr+'-band')
     pl.savefig('moments_whisker_'+expid+'.png')
     pl.close()
     M20 = data[:,0] + data[:,1]
@@ -768,7 +769,7 @@ def des_img_analysis(img_name=None):
     whk = ((datamean[0]-datamean[1])**2 + (2.*datamean[2])**2)**(0.25)*scale
     phi = np.rad2deg(0.5*np.arctan2(2.*datamean[2],(datamean[0]-datamean[1])))
     whkrms = (robust_mean((datasubmean[:,0] - datasubmean[:,1])**2 + 4.*datasubmean[:,2]**2))**(0.25)*scale
-    np.savetxt('desIQ_measure_'+expid+'.txt',[int(expid),whk,phi,whkrms,r50Sex],fmt='%10.5f',delimiter=',')
+    np.savetxt('desIQ_measure_'+expid+'_'+fltr+'.txt',[int(expid),whk,phi,whkrms,r50Sex],fmt=['%i','%10.5f','%10.5f','%10.5f','%10.5f'],delimiter=',')
     print 'expid -----whisker----whisker Position Angle -----whisker rms ----- r50 ------'
     print expid, whk, phi, whkrms, r50Sex
     #---the hexapod adjustment using M20,M22---
@@ -792,11 +793,11 @@ def des_img_analysis(img_name=None):
     hexHao = hexapodPosition(beta,betaErr,weighted=False)
     hexposhdr = np.array(hexposhdr.split(',')).astype(float)[0:5]
     hexBCAM = np.array([bcamDX,bcamDY,-999,bcamAX,bcamAY])
-    np.savetxt('hexapod_position_'+expid+'.txt',[hexposhdr,hexHao,hexBCAM],fmt='%10.5f')
+    np.savetxt('hexapod_position_'+expid+'_'+fltr+'.txt',[hexposhdr,hexHao,hexBCAM],fmt='%10.5f')
     #hexHao = hexapod_multilinear(beta)
     dispM202Coeff(betaAll = betaforplot, betaErrAll = betaErrforplot,hexinfo=hexHao)
-    pl.figtext(0.4,0.96,'expid: '+str(expid))
-    pl.savefig('zernike_coeff_'+expid+'.png')    
+    pl.figtext(0.4,0.96,'expid: '+str(expid)+' ,'+fltr+'-band')
+    pl.savefig('zernike_coeff_'+expid+'_'+fltr+'.png')    
     return '----finished one image ----'
 
 def correctMoments(Mcc=None, Mrr=None, Mrc=None,measureSigma=None,targetSigma=2.):
