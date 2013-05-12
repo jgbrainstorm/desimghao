@@ -20,6 +20,6 @@ else:
     os.system('rm *.fz')
     os.system('desImgQuickReduction.py all')
     os.system('desImgQuality.py all')
-    os.system('htmlFig.py '+ day')
+    os.system('htmlFig.py '+ day)
 
     
