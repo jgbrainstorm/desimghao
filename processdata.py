@@ -2,14 +2,17 @@
 
 import sys,os
 import numpy as np
-
-sourceDIR = '/home3/data_local/images/fits/2012B-9999/'
+from datetime import datetime
+day = str(datetime.now())[0:10]
 
 if len(sys.argv) == 1:
     print 'syntax: '
-    print 'processdata.py expidFile'
+    print 'processdata.py sourceImageDir expidFile'
+    print 'example: '
+    print 'processdata.py /home3/data_local/images/fits/2012B-9999/ expid.txt'
 else:
-    expidFile=sys.argv[1]
+    sourceDIR = sys.argv[1]
+    expidFile=sys.argv[2]
     b = np.genfromtxt(expidFile,dtype='i')
     for expid in b:
         os.system('cp '+sourceDIR+'DECam_00'+str(expid)+'.fits.fz'+' .')
@@ -17,6 +20,6 @@ else:
     os.system('rm *.fz')
     os.system('desImgQuickReduction.py all')
     os.system('desImgQuality.py all')
-    os.system('htmlFig.py 3-26/27-2013 bestimage')
+    os.system('htmlFig.py '+ day')
 
     
